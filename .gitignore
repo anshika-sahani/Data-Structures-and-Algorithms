@@ -1,218 +1,1233 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[codz]
-*$py.class
+class Car:
 
-# C extensions
-*.so
+    def __init__(self, car_id, brand, model, price, available=True):
+        self.car_id = car_id
+        self.brand = brand
+        self.model = model
+        self.price = price
+        self.available = available
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 
-# PyInstaller
-#   Usually these files are written by a python script from a template
-#   before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+class Node:
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+    def __init__(self, car):
+        self.car = car
+        self.next = None
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py.cover
-.hypothesis/
-.pytest_cache/
-cover/
 
-# Translations
-*.mo
-*.pot
+class CarLinkedList:
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+    def __init__(self):
+        self.head = None
 
-# Flask stuff:
-instance/
-.webassets-cache
+    def append(self, car):
 
-# Scrapy stuff:
-.scrapy
+        new_node = Node(car)
 
-# Sphinx documentation
-docs/_build/
+        if self.head is None:
+            self.head = new_node
+            return
 
-# PyBuilder
-.pybuilder/
-target/
+        current = self.head
 
-# Jupyter Notebook
-.ipynb_checkpoints
+        while current.next:
+            current = current.next
 
-# IPython
-profile_default/
-ipython_config.py
+        current.next = new_node
 
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
+    def remove(self, car):
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-# Pipfile.lock
+        if self.head is None:
+            return False
 
-# UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-# uv.lock
+        if self.head.car == car:
+            self.head = self.head.next
+            return True
 
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-# poetry.lock
-# poetry.toml
+        current = self.head
 
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#   pdm recommends including project-wide configuration in pdm.toml, but excluding .pdm-python.
-#   https://pdm-project.org/en/latest/usage/project/#working-with-version-control
-# pdm.lock
-# pdm.toml
-.pdm-python
-.pdm-build/
+        while current.next:
 
-# pixi
-#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
-# pixi.lock
-#   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one
-#   in the .venv directory. It is recommended not to include this directory in version control.
-.pixi
+            if current.next.car == car:
+                current.next = current.next.next
+                return True
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
+            current = current.next
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
+        return False
 
-# Redis
-*.rdb
-*.aof
-*.pid
+    def search(self, identifier):
 
-# RabbitMQ
-mnesia/
-rabbitmq/
-rabbitmq-data/
+        current = self.head
+        identifier = str(identifier).strip().lower()
 
-# ActiveMQ
-activemq-data/
+        while current:
 
-# SageMath parsed files
-*.sage.py
+            car = current.car
 
-# Environments
-.env
-.envrc
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+            if (
+                str(car.car_id).lower() == identifier
+                or car.brand.lower() == identifier
+                or car.model.lower() == identifier
+            ):
+                return car
 
-# Spyder project settings
-.spyderproject
-.spyproject
+            current = current.next
 
-# Rope project settings
-.ropeproject
+        return None
 
-# mkdocs documentation
-/site
+    def to_list(self):
 
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
+        cars = []
+        current = self.head
 
-# Pyre type checker
-.pyre/
+        while current:
 
-# pytype static type analyzer
-.pytype/
+            cars.append(current.car)
+            current = current.next
 
-# Cython debug symbols
-cython_debug/
+        return cars
 
-# PyCharm
-#   JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#   be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#   and can be added to the global gitignore or merged into this file.  For a more nuclear
-#   option (not recommended) you can uncomment the following to ignore the entire idea folder.
-# .idea/
+    def count(self):
 
-# Abstra
-#   Abstra is an AI-powered process automation framework.
-#   Ignore directories containing user credentials, local state, and settings.
-#   Learn more at https://abstra.io/docs
-.abstra/
+        total = 0
+        current = self.head
 
-# Visual Studio Code
-#   Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
-#   that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#   and can be added to the global gitignore or merged into this file. However, if you prefer, 
-#   you could uncomment the following to ignore the entire vscode folder
-# .vscode/
-# Temporary file for partial code execution
-tempCodeRunnerFile.py
+        while current:
 
-# Ruff stuff:
-.ruff_cache/
+            total += 1
+            current = current.next
 
-# PyPI configuration file
-.pypirc
+        return total
 
-# Marimo
-marimo/_static/
-marimo/_lsp/
-__marimo__/
 
-# Streamlit
-.streamlit/secrets.toml
+class RentalQueue:
+
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, rental):
+        self.queue.append(rental)
+
+    def dequeue(self):
+
+        if len(self.queue) == 0:
+            return None
+
+        return self.queue.pop(0)
+
+    def is_empty(self):
+        return len(self.queue) == 0
+
+
+class RentalStack:
+
+    def __init__(self):
+        self.stack = []
+
+    def push(self, rental):
+        self.stack.append(rental)
+
+    def pop(self):
+
+        if len(self.stack) == 0:
+            return None
+
+        return self.stack.pop()
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+    def get_all(self):
+        return self.stack
+
+
+class CarRentalSystem:
+
+    def __init__(self):
+
+        self.cars = CarLinkedList()
+        self.rental_queue = RentalQueue()
+        self.rental_history = RentalStack()
+
+        self.car_file = "cars.txt"
+        self.history_file = "rental_history.txt"
+
+        self.load_data()
+
+    def get_valid_car_id(self, update=False):
+
+        while True:
+
+            car_id = input(
+                "\nEnter Car ID: "
+            ).strip()
+
+            if car_id == "":
+                print("Car ID cannot be empty.")
+                continue
+
+            if not car_id.isdigit():
+                print("Car ID must contain only positive numbers.")
+                continue
+
+            if int(car_id) <= 0:
+                print("Car ID must be greater than 0.")
+                continue
+
+            if not update and self.search_car(car_id):
+                print("Car ID already exists.")
+                continue
+
+            return car_id
+
+    def get_valid_text(self, message):
+
+        while True:
+
+            value = input(message).strip()
+
+            if value == "":
+                print("This field cannot be empty.")
+                continue
+
+            if "|" in value:
+                print("The character '|' is not allowed.")
+                continue
+
+            if not any(char.isalpha() for char in value):
+                print("Please enter valid text.")
+                continue
+
+            return value
+
+    def get_valid_price(self, message):
+
+        while True:
+
+            value = input(message).strip()
+
+            if value == "":
+                print("Price cannot be empty.")
+                continue
+
+            try:
+
+                price = float(value)
+
+                if price <= 0:
+                    print("Price must be greater than 0.")
+                    continue
+
+                return price
+
+            except ValueError:
+                print("Please enter a valid numeric price.")
+
+    def get_valid_days(self):
+
+        while True:
+
+            value = input(
+                "Enter number of rental days: "
+            ).strip()
+
+            if value == "":
+                print("Rental days cannot be empty.")
+                continue
+
+            try:
+
+                days = int(value)
+
+                if days <= 0:
+                    print(
+                        "Number of rental days must be greater than 0."
+                    )
+                    continue
+
+                return days
+
+            except ValueError:
+                print("Rental days must be a whole number.")
+
+    def add_car(self, car_id, brand, model, price):
+
+        try:
+
+            if self.search_car(car_id):
+
+                print("\n+--------------------------------------+")
+                print("|          CAR ALREADY EXISTS          |")
+                print("+--------------------------------------+")
+                return
+
+            car = Car(
+                car_id,
+                brand,
+                model,
+                price
+            )
+
+            self.cars.append(car)
+            self.save_data()
+
+            print("\n+--------------------------------------+")
+            print("|          CAR ADDED SUCCESSFULLY      |")
+            print("+--------------------------------------+")
+            print(f"| ID     : {car_id:<26}|")
+            print(f"| Brand  : {brand:<25}|")
+            print(f"| Model  : {model:<25}|")
+            print(f"| Price  : Rs.{price:<21}|")
+            print("+--------------------------------------+")
+
+        except Exception as e:
+
+            print("\nError while adding car:", e)
+
+    def display_cars(self):
+
+        cars = self.cars.to_list()
+
+        print("\n")
+        print("+==========================================================================+")
+        print("|                           CAR LIST                                      |")
+        print("+==========================================================================+")
+        print("| ID    | Brand          | Model          | Price/Day      | Status       |")
+        print("+-------+----------------+----------------+----------------+--------------+")
+
+        if len(cars) == 0:
+
+            print("|                         No cars available.                              |")
+            print("+==========================================================================+")
+            return
+
+        for car in cars:
+
+            status = "Available" if car.available else "Rented"
+
+            print(
+                f"| {str(car.car_id):<5} | "
+                f"{car.brand:<14} | "
+                f"{car.model:<14} | "
+                f"Rs.{car.price:<11} | "
+                f"{status:<12} |"
+            )
+
+        print("+==========================================================================+")
+
+    def search_car(self, identifier):
+
+        if identifier is None:
+            return None
+
+        identifier = str(identifier).strip()
+
+        if identifier == "":
+            return None
+
+        return self.cars.search(identifier)
+
+    def update_car(self):
+
+        try:
+
+            identifier = input(
+                "\nEnter Car ID to update: "
+            ).strip()
+
+            if identifier == "":
+                print("Car ID cannot be empty.")
+                return
+
+            if not identifier.isdigit():
+
+                print("\n+--------------------------------------+")
+                print("|       INVALID CAR ID                 |")
+                print("|       ENTER POSITIVE NUMBERS         |")
+                print("+--------------------------------------+")
+                return
+
+            car = self.search_car(identifier)
+
+            if car is None:
+
+                print("\n+--------------------------------------+")
+                print("|             CAR NOT FOUND            |")
+                print("+--------------------------------------+")
+                return
+
+            print("\n+--------------------------------------+")
+            print("|            UPDATE CAR                |")
+            print("+--------------------------------------+")
+            print("Leave blank to keep the old value.")
+
+            brand = input(
+                f"Enter new brand [{car.brand}]: "
+            ).strip()
+
+            model = input(
+                f"Enter new model [{car.model}]: "
+            ).strip()
+
+            price = input(
+                f"Enter new price [{car.price}]: "
+            ).strip()
+
+            if brand:
+
+                if "|" in brand:
+                    print("Invalid brand. Old brand kept.")
+
+                elif not any(char.isalpha() for char in brand):
+                    print("Invalid brand. Old brand kept.")
+
+                else:
+                    car.brand = brand
+
+            if model:
+
+                if "|" in model:
+                    print("Invalid model. Old model kept.")
+
+                elif not any(char.isalpha() for char in model):
+                    print("Invalid model. Old model kept.")
+
+                else:
+                    car.model = model
+
+            if price:
+
+                try:
+
+                    new_price = float(price)
+
+                    if new_price <= 0:
+                        print(
+                            "Price must be greater than 0. "
+                            "Old price kept."
+                        )
+
+                    else:
+                        car.price = new_price
+
+                except ValueError:
+
+                    print(
+                        "Invalid price. Old price kept."
+                    )
+
+            self.save_data()
+
+            print("\n+--------------------------------------+")
+            print("|          CAR UPDATED SUCCESSFULLY    |")
+            print("+--------------------------------------+")
+
+        except Exception as e:
+
+            print(
+                "\nError while updating car:",
+                e
+            )
+
+    def delete_car(self):
+
+        try:
+
+            identifier = input(
+                "\nEnter Car ID to delete: "
+            ).strip()
+
+            if identifier == "":
+                print("Car ID cannot be empty.")
+                return
+
+            if not identifier.isdigit():
+
+                print("\n+--------------------------------------+")
+                print("|       INVALID CAR ID                 |")
+                print("+--------------------------------------+")
+                return
+
+            car = self.search_car(identifier)
+
+            if car is None:
+
+                print("\n+--------------------------------------+")
+                print("|             CAR NOT FOUND            |")
+                print("+--------------------------------------+")
+                return
+
+            if not car.available:
+
+                print("\n+--------------------------------------+")
+                print("|       RENTED CAR CANNOT BE DELETED   |")
+                print("+--------------------------------------+")
+                return
+
+            self.cars.remove(car)
+            self.save_data()
+
+            print("\n+--------------------------------------+")
+            print("|          CAR DELETED SUCCESSFULLY    |")
+            print("+--------------------------------------+")
+
+        except Exception as e:
+
+            print(
+                "\nError while deleting car:",
+                e
+            )
+
+    def sort_by_price(self):
+
+        cars = self.cars.to_list()
+
+        cars.sort(
+            key=lambda car: car.price
+        )
+
+        print("\n")
+        print("+==========================================================================+")
+        print("|                         SORTED BY PRICE                                 |")
+        print("+==========================================================================+")
+        print("| ID    | Brand          | Model          | Price/Day      | Status       |")
+        print("+-------+----------------+----------------+----------------+--------------+")
+
+        if len(cars) == 0:
+
+            print("|                         No cars available.                              |")
+            print("+==========================================================================+")
+            return
+
+        for car in cars:
+
+            status = "Available" if car.available else "Rented"
+
+            print(
+                f"| {str(car.car_id):<5} | "
+                f"{car.brand:<14} | "
+                f"{car.model:<14} | "
+                f"Rs.{car.price:<11} | "
+                f"{status:<12} |"
+            )
+
+        print("+==========================================================================+")
+
+    def sort_by_brand(self):
+
+        cars = self.cars.to_list()
+
+        cars.sort(
+            key=lambda car: car.brand.lower()
+        )
+
+        print("\n")
+        print("+==========================================================================+")
+        print("|                         SORTED BY BRAND                                 |")
+        print("+==========================================================================+")
+        print("| ID    | Brand          | Model          | Price/Day      | Status       |")
+        print("+-------+----------------+----------------+----------------+--------------+")
+
+        if len(cars) == 0:
+
+            print("|                         No cars available.                              |")
+            print("+==========================================================================+")
+            return
+
+        for car in cars:
+
+            status = "Available" if car.available else "Rented"
+
+            print(
+                f"| {str(car.car_id):<5} | "
+                f"{car.brand:<14} | "
+                f"{car.model:<14} | "
+                f"Rs.{car.price:<11} | "
+                f"{status:<12} |"
+            )
+
+        print("+==========================================================================+")
+
+    def sort_by_model(self):
+
+        cars = self.cars.to_list()
+
+        cars.sort(
+            key=lambda car: car.model.lower()
+        )
+
+        print("\n")
+        print("+==========================================================================+")
+        print("|                         SORTED BY MODEL                                 |")
+        print("+==========================================================================+")
+        print("| ID    | Brand          | Model          | Price/Day      | Status       |")
+        print("+-------+----------------+----------------+----------------+--------------+")
+
+        if len(cars) == 0:
+
+            print("|                         No cars available.                              |")
+            print("+==========================================================================+")
+            return
+
+        for car in cars:
+
+            status = "Available" if car.available else "Rented"
+
+            print(
+                f"| {str(car.car_id):<5} | "
+                f"{car.brand:<14} | "
+                f"{car.model:<14} | "
+                f"Rs.{car.price:<11} | "
+                f"{status:<12} |"
+            )
+
+        print("+==========================================================================+")
+
+    def rent_car(self):
+
+        try:
+
+            print("\n+--------------------------------------+")
+            print("|             RENT A CAR               |")
+            print("+--------------------------------------+")
+
+            identifier = input(
+                "Enter car ID, brand or model: "
+            ).strip()
+
+            if identifier == "":
+
+                print("\n+--------------------------------------+")
+                print("|       SEARCH INPUT CANNOT BE EMPTY   |")
+                print("+--------------------------------------+")
+                return
+
+            car = self.search_car(identifier)
+
+            if car is None:
+
+                print("\n+--------------------------------------+")
+                print("|             CAR NOT FOUND            |")
+                print("+--------------------------------------+")
+                return
+
+            if not car.available:
+
+                print("\n+--------------------------------------+")
+                print("|          CAR ALREADY RENTED          |")
+                print("+--------------------------------------+")
+                return
+
+            customer = self.get_valid_text(
+                "Enter customer name: "
+            )
+
+            days = self.get_valid_days()
+
+            bill = days * car.price
+
+            rental = {
+                "customer": customer,
+                "car_id": car.car_id,
+                "car": f"{car.brand} {car.model}",
+                "days": days,
+                "bill": bill
+            }
+
+            self.rental_queue.enqueue(rental)
+
+            request = self.rental_queue.dequeue()
+
+            car.available = False
+
+            self.rental_history.push(request)
+
+            self.save_data()
+
+            print("\n")
+            print("+==================================================+")
+            print("|              CAR BOOKED SUCCESSFULLY             |")
+            print("+==================================================+")
+            print(f"| Customer     : {customer:<33}|")
+            print(
+                f"| Car          : "
+                f"{car.brand + ' ' + car.model:<33}|"
+            )
+            print(f"| Rental Days  : {days:<33}|")
+            print(f"| Price/Day    : Rs.{car.price:<30}|")
+            print(f"| Total Bill   : Rs.{bill:<30}|")
+            print("+==================================================+")
+
+        except Exception as e:
+
+            print(
+                "\nError while renting car:",
+                e
+            )
+
+    def return_car(self):
+
+        try:
+
+            print("\n+--------------------------------------+")
+            print("|             RETURN CAR               |")
+            print("+--------------------------------------+")
+
+            identifier = input(
+                "Enter car ID, brand or model: "
+            ).strip()
+
+            if identifier == "":
+
+                print("\n+--------------------------------------+")
+                print("|       SEARCH INPUT CANNOT BE EMPTY   |")
+                print("+--------------------------------------+")
+                return
+
+            car = self.search_car(identifier)
+
+            if car is None:
+
+                print("\n+--------------------------------------+")
+                print("|             CAR NOT FOUND            |")
+                print("+--------------------------------------+")
+                return
+
+            if car.available:
+
+                print("\n+--------------------------------------+")
+                print("|         THIS CAR WAS NOT RENTED      |")
+                print("+--------------------------------------+")
+                return
+
+            car.available = True
+
+            self.save_data()
+
+            print("\n+--------------------------------------+")
+            print("|        CAR RETURNED SUCCESSFULLY     |")
+            print("+--------------------------------------+")
+
+        except Exception as e:
+
+            print(
+                "\nError while returning car:",
+                e
+            )
+
+    def show_history(self):
+
+        print("\n")
+        print("+==========================================================================+")
+        print("|                         RENTAL HISTORY                                  |")
+        print("+==========================================================================+")
+
+        history = self.rental_history.get_all()
+
+        if len(history) == 0:
+
+            print("|                         No rental history found.                        |")
+            print("+==========================================================================+")
+            return
+
+        print("| Customer       | Car              | Days       | Bill                   |")
+        print("+----------------+------------------+------------+------------------------+")
+
+        for rental in reversed(history):
+
+            print(
+                f"| {rental['customer']:<14} | "
+                f"{rental['car']:<16} | "
+                f"{rental['days']:<10} | "
+                f"Rs.{rental['bill']:<19} |"
+            )
+
+        print("+==========================================================================+")
+
+    def rental_summary(self):
+
+        try:
+
+            cars = self.cars.to_list()
+
+            total_cars = len(cars)
+            available_cars = 0
+            rented_cars = 0
+            total_revenue = 0
+
+            for car in cars:
+
+                if car.available:
+                    available_cars += 1
+
+                else:
+                    rented_cars += 1
+
+            for rental in self.rental_history.get_all():
+
+                total_revenue += rental["bill"]
+
+            print("\n")
+            print("+==================================================+")
+            print("|                 RENTAL SUMMARY                   |")
+            print("+==================================================+")
+            print(f"| Total Cars        : {total_cars:<25}|")
+            print(f"| Available Cars    : {available_cars:<25}|")
+            print(f"| Rented Cars       : {rented_cars:<25}|")
+            print(
+                f"| Completed Rentals : "
+                f"{len(self.rental_history.get_all()):<25}|"
+            )
+            print(
+                f"| Total Revenue     : "
+                f"Rs.{total_revenue:<21}|"
+            )
+            print("+==================================================+")
+
+        except Exception as e:
+
+            print(
+                "\nError while generating summary:",
+                e
+            )
+
+    def save_data(self):
+
+        try:
+
+            with open(
+                self.car_file,
+                "w"
+            ) as file:
+
+                for car in self.cars.to_list():
+
+                    file.write(
+                        f"{car.car_id}|"
+                        f"{car.brand}|"
+                        f"{car.model}|"
+                        f"{car.price}|"
+                        f"{car.available}\n"
+                    )
+
+            with open(
+                self.history_file,
+                "w"
+            ) as file:
+
+                for rental in self.rental_history.get_all():
+
+                    file.write(
+                        f"{rental['customer']}|"
+                        f"{rental['car_id']}|"
+                        f"{rental['car']}|"
+                        f"{rental['days']}|"
+                        f"{rental['bill']}\n"
+                    )
+
+        except PermissionError:
+
+            print(
+                "Error: Permission denied while saving files."
+            )
+
+        except OSError as e:
+
+            print(
+                "Error while saving files:",
+                e
+            )
+
+        except Exception as e:
+
+            print(
+                "Unexpected file error:",
+                e
+            )
+
+    def load_data(self):
+
+        try:
+
+            try:
+
+                with open(
+                    self.car_file,
+                    "r"
+                ) as file:
+
+                    for line_number, line in enumerate(
+                        file,
+                        start=1
+                    ):
+
+                        try:
+
+                            data = line.strip().split("|")
+
+                            if len(data) != 5:
+
+                                print(
+                                    f"Invalid car data "
+                                    f"at line {line_number}."
+                                )
+                                continue
+
+                            car_id = data[0].strip()
+                            brand = data[1].strip()
+                            model = data[2].strip()
+                            price = float(data[3].strip())
+                            available = data[4].strip() == "True"
+
+                            if not car_id.isdigit():
+                                print(
+                                    f"Invalid Car ID at line "
+                                    f"{line_number}."
+                                )
+                                continue
+
+                            if price <= 0:
+                                print(
+                                    f"Invalid price at line "
+                                    f"{line_number}."
+                                )
+                                continue
+
+                            car = Car(
+                                car_id,
+                                brand,
+                                model,
+                                price,
+                                available
+                            )
+
+                            self.cars.append(car)
+
+                        except ValueError:
+
+                            print(
+                                f"Invalid numeric data "
+                                f"at car file line {line_number}."
+                            )
+
+            except FileNotFoundError:
+                pass
+
+            try:
+
+                with open(
+                    self.history_file,
+                    "r"
+                ) as file:
+
+                    for line_number, line in enumerate(
+                        file,
+                        start=1
+                    ):
+
+                        try:
+
+                            data = line.strip().split("|")
+
+                            if len(data) != 5:
+
+                                print(
+                                    f"Invalid rental history "
+                                    f"at line {line_number}."
+                                )
+                                continue
+
+                            customer = data[0].strip()
+                            car_id = data[1].strip()
+                            car_name = data[2].strip()
+                            days = int(data[3].strip())
+                            bill = float(data[4].strip())
+
+                            if customer == "":
+                                print(
+                                    f"Invalid customer name "
+                                    f"at line {line_number}."
+                                )
+                                continue
+
+                            if days <= 0:
+                                print(
+                                    f"Invalid rental days "
+                                    f"at line {line_number}."
+                                )
+                                continue
+
+                            if bill < 0:
+                                print(
+                                    f"Invalid bill "
+                                    f"at line {line_number}."
+                                )
+                                continue
+
+                            rental = {
+                                "customer": customer,
+                                "car_id": car_id,
+                                "car": car_name,
+                                "days": days,
+                                "bill": bill
+                            }
+
+                            self.rental_history.push(rental)
+
+                        except ValueError:
+
+                            print(
+                                f"Invalid numeric data "
+                                f"at history file line {line_number}."
+                            )
+
+            except FileNotFoundError:
+                pass
+
+            if (
+                self.cars.count() == 0
+                and len(self.rental_history.get_all()) == 0
+            ):
+
+                print("\n+--------------------------------------+")
+                print("|       STARTING NEW SYSTEM            |")
+                print("+--------------------------------------+")
+
+            else:
+
+                print("\n+--------------------------------------+")
+                print("|      PREVIOUS DATA LOADED            |")
+                print("+--------------------------------------+")
+
+        except PermissionError:
+
+            print(
+                "\nError: Permission denied while reading files."
+            )
+
+        except OSError as e:
+
+            print(
+                "\nError while reading data:",
+                e
+            )
+
+        except Exception as e:
+
+            print(
+                "\nError while loading data:",
+                e
+            )
+
+
+system = CarRentalSystem()
+
+
+if system.cars.count() == 0:
+
+    system.add_car(
+        "101",
+        "Maruti",
+        "Swift",
+        1500
+    )
+
+    system.add_car(
+        "102",
+        "Hyundai",
+        "Creta",
+        2500
+    )
+
+    system.add_car(
+        "103",
+        "Maruti",
+        "Baleno",
+        1800
+    )
+
+    system.add_car(
+        "104",
+        "Mahindra",
+        "Thar",
+        3500
+    )
+
+    system.add_car(
+        "105",
+        "Toyota",
+        "Innova",
+        4000
+    )
+
+
+while True:
+
+    print("\n")
+    print("+==================================================+")
+    print("|           CAR RENTAL MANAGEMENT SYSTEM           |")
+    print("+==================================================+")
+    print("|  1. Display Cars                                 |")
+    print("|  2. Search Car                                   |")
+    print("|  3. Add Car                                      |")
+    print("|  4. Update Car                                   |")
+    print("|  5. Delete Car                                   |")
+    print("|  6. Sort by Price                                |")
+    print("|  7. Sort by Brand                                |")
+    print("|  8. Sort by Model                                |")
+    print("|  9. Rent Car                                     |")
+    print("| 10. Return Car                                   |")
+    print("| 11. Show Rental History                          |")
+    print("| 12. Rental Summary                               |")
+    print("| 13. Exit                                         |")
+    print("+==================================================+")
+
+    try:
+
+        choice_input = input(
+            "Enter your choice: "
+        ).strip()
+
+        if choice_input == "":
+            raise ValueError(
+                "Choice cannot be empty."
+            )
+
+        choice = int(choice_input)
+
+        if choice < 1 or choice > 13:
+
+            print("\n+--------------------------------------+")
+            print("|             INVALID CHOICE           |")
+            print("|        PLEASE SELECT 1 - 13          |")
+            print("+--------------------------------------+")
+            continue
+
+    except ValueError as e:
+
+        print("\n+--------------------------------------+")
+        print("|       PLEASE ENTER A VALID NUMBER    |")
+        print("+--------------------------------------+")
+        print(e)
+        continue
+
+    if choice == 1:
+
+        system.display_cars()
+
+    elif choice == 2:
+
+        print("\n+--------------------------------------+")
+        print("|              SEARCH CAR              |")
+        print("+--------------------------------------+")
+
+        identifier = input(
+            "Enter Car ID, Brand or Model: "
+        ).strip()
+
+        if identifier == "":
+
+            print("\n+--------------------------------------+")
+            print("|       SEARCH INPUT CANNOT BE EMPTY   |")
+            print("+--------------------------------------+")
+            continue
+
+        car = system.search_car(identifier)
+
+        if car:
+
+            print("\n+======================================+")
+            print("|              CAR FOUND              |")
+            print("+======================================+")
+            print(f"| ID      : {str(car.car_id):<25}|")
+            print(f"| Brand   : {car.brand:<25}|")
+            print(f"| Model   : {car.model:<25}|")
+            print(f"| Price   : Rs.{car.price:<20}|")
+            print(
+                f"| Status  : "
+                f"{'Available' if car.available else 'Rented':<24}|"
+            )
+            print("+======================================+")
+
+        else:
+
+            print("\n+--------------------------------------+")
+            print("|             CAR NOT FOUND            |")
+            print("+--------------------------------------+")
+
+    elif choice == 3:
+
+        print("\n+--------------------------------------+")
+        print("|               ADD CAR                |")
+        print("+--------------------------------------+")
+
+        car_id = system.get_valid_car_id()
+
+        brand = system.get_valid_text(
+            "Enter Brand: "
+        )
+
+        model = system.get_valid_text(
+            "Enter Model: "
+        )
+
+        price = system.get_valid_price(
+            "Enter Price per day: "
+        )
+
+        system.add_car(
+            car_id,
+            brand,
+            model,
+            price
+        )
+
+    elif choice == 4:
+
+        system.update_car()
+
+    elif choice == 5:
+
+        system.delete_car()
+
+    elif choice == 6:
+
+        system.sort_by_price()
+
+    elif choice == 7:
+
+        system.sort_by_brand()
+
+    elif choice == 8:
+
+        system.sort_by_model()
+
+    elif choice == 9:
+
+        system.rent_car()
+
+    elif choice == 10:
+
+        system.return_car()
+
+    elif choice == 11:
+
+        system.show_history()
+
+    elif choice == 12:
+
+        system.rental_summary()
+
+    elif choice == 13:
+
+        system.save_data()
+
+        print("\n")
+        print("+==================================================+")
+        print("|                                                  |")
+        print("|     THANK YOU FOR USING THE CAR RENTAL SYSTEM   |")
+        print("|                                                  |")
+        print("+==================================================+")
+
+        break
